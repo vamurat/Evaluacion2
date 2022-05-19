@@ -59,17 +59,17 @@
         </div>
       </div>
     </nav>
-    <div class="container">
+      <div class="container">
       <div class="row">
-          <div class="col-12">
-              <div id="perrosAqui">
-              </div>
-              
-              <div id="textoPerro"></div>
+        <div class="cards col-12">
+          <div id="perrosAqui">
           </div>
-          
+          <div id="textoPerro"></div>
+        </div>
       </div>
-  </div>
+          <div id="popupaqui"></div>
+      
+    </div>
 </body>
     <!-- Optional JavaScript; choose one of the two! -->
 
@@ -81,51 +81,89 @@
   </html>
     <script>
    $(document).ready( function(){
-        buscarPerros();
+        buscarPerrosid();
     })  
 
-    function buscarPerros() {
-        const apiKey = "563492ad6f9170000100000115f0b9c2994f4a6d96265cc7e3ae4166"
-        var photos = "dogs"
-        var image = ''
-        
-        $.ajax({
-            method: 'GET',
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", apiKey);
-            },
-            url: "https://api.pexels.com/v1/search?query="+ photos +"&per_page=8&page=1",
-            success: function(data) {
-                console.log(data);
-                data.photos.forEach(photos => {
-                    console.log(photos.alt);
-                    image = ` 
-                    <div class="card" style="width: 300px; display: inline-block !important;">
-                            <img src="${ photos.src.tiny}" class="card-img-top"  alt="${ photos.alt }">
+    function buscarPerrosid() {
+		const apiKey = "563492ad6f9170000100000115f0b9c2994f4a6d96265cc7e3ae4166"
+		var photos = "puppies"
+		var image = ''
+		var pop = ''
+		//https://api.pexels.com/v1/photos/
+		$.ajax({
+			method: 'GET',
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader("Authorization", apiKey);
+			},
+			url: "https://api.pexels.com/v1/search?query=" + photos + "&per_page=8&page=1",
+			success: function (data) {
+			//console.log(data);
+			data.photos.forEach(photos => {
+					//console.log(photos.id);
+					image = ` 
+					
+                    <div class="card" style="width: 300px; display: inline-block !important;>
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#a${photos.id}">
+							<img src="${photos.src.tiny}" class="card-img-top"  alt="${photos.alt}">
+						</button>
                         <div class="card-body">
-                            <p class="card-text">${ photos.alt }</p>
+                            <p class="card-text">${photos.alt}</p>
                         </div>
                     </div>
                     
                     `
-                    //width="350"
-                    //<img title="${ photos.alt }" alt="${ photos.alt }" style="margin-top:5px" src="${ photos.src.tiny}"  />
-                    //<span class="desc-Foto">${ photos.alt }</span>
-                    $("#perrosAqui").append(image)
-                    
-                });
-            },
-            error: function(error){
-                console.log(error);
-            }
-        })
-    }
-    
+					pop = 
+					`
+					
+					<div class="modal fade" id="a${photos.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">Producto</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<h1>Producto</h1>
+								<img src="${photos.src.tiny}"
+									width="450px" alt="">
+								<p>${photos.alt}</p>
+								<p>Precio: $${photos.height}</p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+								<button type="button" class="btn btn-primary">Comprar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+					`
+					//width="350"
+					//<img title="${ photos.alt }" alt="${ photos.alt }" style="margin-top:5px" src="${ photos.src.tiny}"  />
+					//<span class="desc-Foto">${ photos.alt }</span>
+					$("#perrosAqui").append(image)
+					$("#popupaqui").append(pop)
+
+				});
+			},
+			error: function (error) {
+				console.log(error);
+			}
+		})
+	}
 
   </script>
 <style>
   .card{
-      margin-top: 3px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+  }
+  .card{
+      margin-top: 25px;
+      margin-left: 10px;
+      cursor: pointer;
   }
   .card-text{
       font-size: small;
